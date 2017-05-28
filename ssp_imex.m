@@ -173,7 +173,7 @@ else
     
     % check if order conditions are satisfied
     order = check_order('imex',alpha,beta,hatbeta,ordertol);
-    if order ~= p
+    if order < p
         msg = ['The optimal method does not satisfy the order ' ...
             'conditions. Consider increasing the tolerance (ordertol).'];
         warning(msg)

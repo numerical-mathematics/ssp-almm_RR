@@ -39,8 +39,8 @@ fig = figure();
 plot(y,C,y,tildeC,'-.','LineWidth',2);
 hold on;
 plot(y, R*ones(length(y)),'--k','LineWidth',2);
-ssp = sprintf('$\\mathcal{C}_{%d,%d}(y)$',k,p);
-tildessp = sprintf('$\\tilde{\\mathcal{C}}_{%d,%d}(y)$',k,p);
+ssp = sprintf('$\\mathcal{C}_{%d,%d}(\\xi)$',k,p);
+tildessp = sprintf('$\\tilde{\\mathcal{C}}_{%d,%d}(\\xi)$',k,p);
 hc = get(fig,'children'); set(hc,'fontsize',18);
 hleg = legend({ssp,tildessp},'Interpreter','Latex', ...
     'FontSize',20,'Location','SouthEast');
@@ -48,7 +48,7 @@ leg_pos = get(hleg,'position');
 leg_pos = [leg_pos(1)-0.1*leg_pos(3) leg_pos(2)+0.1*leg_pos(4) ...
     1.1*leg_pos(3) 1.5*leg_pos(4)];
 set(hleg,'position',leg_pos);
-xlabel('$y$','FontSize',22,'Interpreter','Latex');
+xlabel('$\xi$','FontSize',22,'Interpreter','Latex');
 grid on;
 
 % saving figure

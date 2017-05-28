@@ -34,7 +34,7 @@ The above scripts can be used to reproduce all figures from the paper.
 
 For example, to reproduce Figure 1, in an ```MATLAB``` command window run:
 
-    C = plot_ssp_coeff(k,p,method,solver)
+    C = plot_ssp_coeff(2,2,'ex','linprog')
 
 and to reproduce Figure 2, run:
 

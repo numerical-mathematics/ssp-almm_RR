@@ -94,10 +94,12 @@ bisectol = 1.e-15; % tolerance for bisection termination
 
 % optimization solver
 if strcmp(solver,'linprog')
-    algorithm = 'active-set';
+    algorithm = 'active-set'; ConsTol = 1.e-15;
+%     algorithm = 'interior-point'; ConsTol = 1.e-15;
+%     algorithm = 'dual-simplex'; ConsTol = 1.e-9;
     warning('off','optim:linprog:AlgOptsWillError')
 elseif strcmp(solver,'fmincon')
-    algorithm = 'active-set';
+    algorithm = 'active-set'; ConsTol = 1.e-15;
 elseif ~strcmp(solver,'cvx')
     msg = ['Incorrect optimization solver. Choose one from: ' ...
         '''linprog'', ''fmincon'', ''cvx'''];
@@ -110,7 +112,7 @@ if strcmp(solver,'cvx')
     cvx_quiet true
 else
     opts = optimoptions(solver,'Algorithm',algorithm,'MaxIter',1e6, ...
-        'ConstraintTolerance',1.e-15,'Display','off');
+        'ConstraintTolerance',ConsTol,'Display','off');
 end
 
 % variables for vector of coefficients
@@ -133,6 +135,10 @@ ub = zeros(1,n) + 1.e2;
 f = zeros(1,n);
 ff = @(x) zeros(1,n)*x';
 % ff = @(x) x*x';
+if strcmp(method,'ex') && (11 <= k && k <= 18 && p >= 11)
+    ub = zeros(1,n) + 1.e4;
+    f = ones(1,n);
+end
 
 % initial point for 'fmincon' solver
 c = ones(1,n);
@@ -183,7 +189,7 @@ while (rmax - rmin > bisectol)
     else
         Aeq = [D B];
     end
-    
+
     % optimization program call
     if strcmp(solver,'linprog')
         [~,~,flag] = linprog(f,[],[],Aeq,beq,lb,ub,[],opts);
@@ -311,7 +317,7 @@ else
     
     % check if order conditions are satisfied
     order = check_order('lmm',alpha,beta,tildebeta,ordertol);
-    if order ~= p
+    if order < p
         msg = ['The optimal method does not satisfy the order ' ...
             'conditions. Consider increasing the tolerance (ordertol).'];
         warning(msg)
